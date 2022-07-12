@@ -1,6 +1,6 @@
 # DIO - Desafio de Projeto Typescript - Movie-List
 
-Este repositório contem os códigos do desafio de projeto de introdução ao Typescript da DIO.<br>
+Este repositório contem os códigos do desafios de introdução ao Typescript da DIO.<br>
 O reposítório comtem 4 desafios, cada um com suas propostas, mas todos eles tem como objetivo principal pegar um código JavaScript e refatora-lo em typescript.<br>
 
 ## Desafio 4 - MovieList
