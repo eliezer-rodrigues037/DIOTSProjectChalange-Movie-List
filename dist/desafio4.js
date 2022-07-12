@@ -10,15 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// A ideia dessa atividade é criar um aplicativo que: 
-//    - Busca filmes
-//    - Apresenta uma lista com os resultados pesquisados
-//    - Permite a criação de listas de filmes e a posterior adição de filmes nela
-// Todas as requisições necessárias para as atividades acima já estão prontas, mas a implementação delas ficou pela metade (não vou dar tudo de graça).
-// Atenção para o listener do botão login-button que devolve o sessionID do usuário
-// É necessário fazer um cadastro no https://www.themoviedb.org/ e seguir a documentação do site para entender como gera uma API key https://developers.themoviedb.org/3/getting-started/introduction
-var apiKey = '3f301be7381a03ad8d352314dcc3ec1d';
-let apiKey;
+var apiKey;
 let requestToken;
 let username;
 let password;
@@ -37,28 +29,35 @@ searchButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, f
     if (lista) {
         lista.outerHTML = "";
     }
-    let query = document.getElementById('search').value;
+    let searchEl = document.getElementById('search');
+    let query = searchEl.value;
     let listaDeFilmes = yield procurarFilme(query);
     let ul = document.createElement('ul');
     ul.id = "lista";
     for (const item of listaDeFilmes.results) {
         let li = document.createElement('li');
+        let span = document.createElement('span');
+        span.innerHTML = ' +';
         li.appendChild(document.createTextNode(item.original_title));
+        li.appendChild(span);
         ul.appendChild(li);
     }
     console.log(listaDeFilmes);
     searchContainer.appendChild(ul);
 }));
 function preencherSenha() {
-    password = document.getElementById('senha').value;
+    let senhaEl = document.getElementById('senha');
+    password = senhaEl.value;
     validateLoginButton();
 }
 function preencherLogin() {
-    username = document.getElementById('login').value;
+    let usernameEl = document.getElementById('login');
+    username = usernameEl.value;
     validateLoginButton();
 }
 function preencherApi() {
-    apiKey = document.getElementById('api-key').value;
+    let apiKeyEl = document.getElementById('api-key');
+    apiKey = apiKeyEl.value;
     validateLoginButton();
 }
 function validateLoginButton() {
@@ -70,11 +69,11 @@ function validateLoginButton() {
     }
 }
 class HttpClient {
-    static get({ url, method, body = null }) {
+    static get(req) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 let request = new XMLHttpRequest();
-                request.open(method, url, true);
+                request.open(req.method, req.url, true);
                 request.onload = () => {
                     if (request.status >= 200 && request.status < 300) {
                         resolve(JSON.parse(request.responseText));
@@ -92,34 +91,15 @@ class HttpClient {
                         statusText: request.statusText
                     });
                 };
-                if (body) {
+                let body;
+                if (req.body) {
                     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                    body = JSON.stringify(body);
+                    body = JSON.stringify(req.body);
                 }
                 request.send(body);
             });
         });
     }
-}
-function procurarFilme(query) {
-    return __awaiter(this, void 0, void 0, function* () {
-        query = encodeURI(query);
-        console.log(query);
-        let result = yield HttpClient.get({
-            url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`,
-            method: "GET"
-        });
-        return result;
-    });
-}
-function adicionarFilme(filmeId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let result = yield HttpClient.get({
-            url: `https://api.themoviedb.org/3/movie/${filmeId}?api_key=${apiKey}&language=en-US`,
-            method: "GET"
-        });
-        console.log(result);
-    });
 }
 function criarRequestToken() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -127,7 +107,9 @@ function criarRequestToken() {
             url: `https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`,
             method: "GET"
         });
-        requestToken = result.request_token;
+        if (result.request_token) {
+            requestToken = result.request_token;
+        }
     });
 }
 function logar() {
@@ -150,6 +132,26 @@ function criarSessao() {
             method: "GET"
         });
         sessionId = result.session_id;
+    });
+}
+function procurarFilme(query) {
+    return __awaiter(this, void 0, void 0, function* () {
+        query = encodeURI(query);
+        console.log(query);
+        let result = yield HttpClient.get({
+            url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`,
+            method: "GET"
+        });
+        return result;
+    });
+}
+function adicionarFilme(filmeId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let result = yield HttpClient.get({
+            url: `https://api.themoviedb.org/3/movie/${filmeId}?api_key=${apiKey}&language=en-US`,
+            method: "GET"
+        });
+        console.log(result);
     });
 }
 function criarLista(nomeDaLista, descricao) {
