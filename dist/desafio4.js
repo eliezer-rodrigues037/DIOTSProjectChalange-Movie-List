@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var apiKey;
+const apiKey = "6957c169875e86ced05694c7997d171c";
 let requestToken;
 let username;
 let password;
@@ -23,6 +23,8 @@ loginButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, fu
     yield criarRequestToken();
     yield logar();
     yield criarSessao();
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "flex";
 }));
 searchButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     let lista = document.getElementById("lista");
@@ -34,9 +36,11 @@ searchButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, f
     let listaDeFilmes = yield procurarFilme(query);
     let ul = document.createElement('ul');
     ul.id = "lista";
+    ul.setAttribute("class", "movie-list");
     for (const item of listaDeFilmes.results) {
         let li = document.createElement('li');
         let span = document.createElement('span');
+        span.title = "Adicionar a lista";
         span.innerHTML = ' +';
         li.appendChild(document.createTextNode(item.original_title));
         li.appendChild(span);
@@ -55,13 +59,8 @@ function preencherLogin() {
     username = usernameEl.value;
     validateLoginButton();
 }
-function preencherApi() {
-    let apiKeyEl = document.getElementById('api-key');
-    apiKey = apiKeyEl.value;
-    validateLoginButton();
-}
 function validateLoginButton() {
-    if (password && username && apiKey) {
+    if (password && username) {
         loginButton.disabled = false;
     }
     else {

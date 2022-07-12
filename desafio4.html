@@ -5,19 +5,32 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="dist/desafio4.js" defer="true"></script>
+        <link rel="stylesheet" href="./assets/styles/styles.css" />
         <title>Desafio 4</title>
     </head>
     <body>
-        <div style="display: flex">
-            <div style="display: flex; width: 300px; height: 100px; justify-content: space-between; flex-direction: column">
-                <input id="login" placeholder="Login" onchange="preencherLogin(event)" />
-                <input id="senha" placeholder="Senha" type="password" onchange="preencherSenha(event)" />
-                <input id="api-key" placeholder="Api Key" onchange="preencherApi()" />
-                <button id="login-button" disabled>Login</button>
+        <div class="container login-container" id="login-container">
+            <input id="login" placeholder="Login" onchange="preencherLogin(event)" />
+            <input id="senha" placeholder="Senha" type="password" onchange="preencherSenha(event)" />
+            <button id="login-button" disabled>Login</button>
+        </div>
+        <div class="contentWraper" id="main-content">
+            <div class="container">
+                <div id="search-container" class="search-container">
+                    <input id="search" placeholder="Escreva..." />
+                    <button id="search-button">Pesquisar Filme</button>
+                </div>
             </div>
-            <div id="search-container" style="margin-left: 20px">
-                <input id="search" placeholder="Escreva..." />
-                <button id="search-button">Pesquisar Filme</button>
+            <div class="list-container">
+                <button>Criar lista</button>
+                <div class="create-list">
+                    <form>
+                        <label for="lname">Nome</label>
+                        <input type="text" placeholder="Minha lista" />
+                        <label for="ldescription">Descrição</label>
+                        <input type="text" placeholder='"Lista com meus filmes favoritos"' />
+                    </form>
+                </div>
             </div>
         </div>
     </body>

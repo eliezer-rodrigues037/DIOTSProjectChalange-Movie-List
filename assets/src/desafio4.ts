@@ -14,7 +14,7 @@ type Filme = {
   original_title:string
 }// Tipo de retorno da requisição da busca de um filme.
 
-var apiKey:string;
+const apiKey = "6957c169875e86ced05694c7997d171c";
 let requestToken:string;
 let username:string;
 let password:string;
@@ -29,6 +29,10 @@ loginButton.addEventListener('click', async () => {
   await criarRequestToken();
   await logar();
   await criarSessao();
+  
+  (document.getElementById("login-container") as HTMLDivElement).style.display = "none";
+  (document.getElementById("main-content") as HTMLDivElement).style.display = "flex";
+
 })
 
 searchButton.addEventListener('click', async () => {
@@ -44,9 +48,11 @@ searchButton.addEventListener('click', async () => {
   };
   let ul = document.createElement('ul');
   ul.id = "lista"
+  ul.setAttribute("class","movie-list");
   for (const item of listaDeFilmes.results) {
     let li = document.createElement('li');
     let span = document.createElement('span');
+    span.title ="Adicionar a lista"
     span.innerHTML = ' +';
     li.appendChild(document.createTextNode(item.original_title));
     li.appendChild(span);
@@ -68,14 +74,8 @@ function preencherLogin() {
   validateLoginButton();
 }
 
-function preencherApi() {
-  let apiKeyEl = document.getElementById('api-key') as HTMLInputElement
-  apiKey = apiKeyEl.value;
-  validateLoginButton();
-}
-
 function validateLoginButton() {
-  if (password && username && apiKey) {
+  if (password && username) {
     loginButton.disabled = false;
   } else {
     loginButton.disabled = true;
@@ -151,8 +151,8 @@ async function criarSessao() {
     success:boolean,
     session_id: string
   }
+  sessionId = result.session_id;
 
-  sessionId = result.session_id ;
 }
 
 async function procurarFilme(query:string) {
